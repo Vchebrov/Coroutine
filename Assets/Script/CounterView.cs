@@ -3,21 +3,19 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(CounterLogic))]
 public class CounterView : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _text;
-       
+
     private CounterLogic _counterLogic;
 
     private void OnEnable()
     {
         _text.text = "0";
 
-        if (_counterLogic == null)
-            _counterLogic = GetComponent<CounterLogic>();
-
-        if (_counterLogic != null)
-            _counterLogic.CounterChanged += OnValueChanged;
+        _counterLogic = GetComponent<CounterLogic>();
+        _counterLogic.CounterChanged += OnValueChanged;
     }
 
     private void OnDisable()

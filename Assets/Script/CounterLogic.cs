@@ -3,29 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ClickLogic))]
 public class CounterLogic : MonoBehaviour
 {
-    [SerializeField] private float _delay = 0.5f;
+    private ClickLogic _clickLogic;
 
-    public event Action<int> CounterChanged;
+    [SerializeField] private float _delay = 0.5f;
 
     private Coroutine _coroutine;
 
     private int _counter = 0;
-    private const int LeftMouseButton = 0;
 
     private bool _inProcess = false;
 
-    public void Update()
+    public event Action<int> CounterChanged;  
+    
+    private void OnEnable()
     {
-        if (Input.GetMouseButtonDown(LeftMouseButton))
-        {
-            Debug.Log("Left button pressed");
-            ToggleCounting();
-        }
+        _clickLogic = GetComponent<ClickLogic>();
+        _clickLogic.ButtonClicked += ToggleCounting;
     }
 
-    private void ToggleCounting()
+    private void OnDisable()
+    {
+        _clickLogic.ButtonClicked -= ToggleCounting;
+    }
+
+    private void ToggleCounting(bool inProcess)
     {
         _inProcess = !_inProcess;
 
